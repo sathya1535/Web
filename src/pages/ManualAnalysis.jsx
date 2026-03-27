@@ -44,6 +44,7 @@ const ManualAnalysis = () => {
     );
   };
 
+  useEffect(() => {
     const fetchPatients = async () => {
       try {
         const response = await patientService.getAllPatients();
@@ -167,6 +168,14 @@ const ManualAnalysis = () => {
   };
 
   const currentSeverity = calculateSeverity(formData);
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
