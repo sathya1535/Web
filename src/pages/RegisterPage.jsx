@@ -13,16 +13,65 @@ const RegisterPage = () => {
     confirmPassword: ''
   });
   const [error, setError] = useState('');
+  const [fieldErrors, setFieldErrors] = useState({ email: '', phone: '', fullname: '' });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  const EMAIL_REGEX = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
+  const PHONE_REGEX = /^[6-9]\d{9}$/;
+  const NAME_REGEX = /^[a-zA-Z ]+$/;
+
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+
+    // Live validation feedback
+    if (name === 'fullname') {
+      setFieldErrors(prev => ({
+        ...prev,
+        fullname: value && !NAME_REGEX.test(value) ? 'Name should contain only letters' : ''
+      }));
+    }
+    if (name === 'email') {
+      setFieldErrors(prev => ({
+        ...prev,
+        email: value && !EMAIL_REGEX.test(value) ? 'Enter a valid email address' : ''
+      }));
+    }
+    if (name === 'phone') {
+      setFieldErrors(prev => ({
+        ...prev,
+        phone: value && !PHONE_REGEX.test(value) ? 'Enter a valid 10-digit Indian phone number' : ''
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+
+    // Validate Full Name
+    const trimmedName = formData.fullname.trim();
+    if (!trimmedName) {
+      setFieldErrors(prev => ({ ...prev, fullname: 'Full Name is required' }));
+      return;
+    }
+    if (!NAME_REGEX.test(trimmedName)) {
+      setFieldErrors(prev => ({ ...prev, fullname: 'Name should contain only letters' }));
+      return;
+    }
+
+    // Validate email
+    if (!EMAIL_REGEX.test(formData.email)) {
+      setFieldErrors(prev => ({ ...prev, email: 'Enter a valid email address' }));
+      return;
+    }
+
+    // Validate Indian phone number
+    if (!PHONE_REGEX.test(formData.phone)) {
+      setFieldErrors(prev => ({ ...prev, phone: 'Enter a valid 10-digit Indian phone number' }));
+      return;
+    }
 
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
@@ -70,28 +119,42 @@ const RegisterPage = () => {
                 placeholder="Dr. John Doe"
                 onChange={handleChange}
                 required
+                style={fieldErrors.fullname ? { borderColor: 'var(--danger-color)' } : {}}
               />
+              {fieldErrors.fullname && (
+                <p style={{ margin: '0.35rem 0 0 0', fontSize: '0.78rem', color: 'var(--danger-color)' }}>{fieldErrors.fullname}</p>
+              )}
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
               <div>
                 <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', fontSize: '0.9rem' }}>Email Address</label>
                 <input 
-                  type="email"
+                  type="text"
                   name="email"
                   placeholder="doctor@example.com"
                   onChange={handleChange}
                   required
+                  style={fieldErrors.email ? { borderColor: 'var(--danger-color)' } : {}}
                 />
+                {fieldErrors.email && (
+                  <p style={{ margin: '0.35rem 0 0 0', fontSize: '0.78rem', color: 'var(--danger-color)' }}>{fieldErrors.email}</p>
+                )}
               </div>
               <div>
                 <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', fontSize: '0.9rem' }}>Phone Number</label>
                 <input 
+                  type="tel"
                   name="phone"
-                  placeholder="+1234567890"
+                  placeholder="9876543210"
+                  maxLength={10}
                   onChange={handleChange}
                   required
+                  style={fieldErrors.phone ? { borderColor: 'var(--danger-color)' } : {}}
                 />
+                {fieldErrors.phone && (
+                  <p style={{ margin: '0.35rem 0 0 0', fontSize: '0.78rem', color: 'var(--danger-color)' }}>{fieldErrors.phone}</p>
+                )}
               </div>
             </div>
 

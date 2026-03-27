@@ -25,7 +25,7 @@ const LoginPage = () => {
           name: response.data.fullname,
           email: email
         });
-        if (email.toLowerCase() === 'admin@medisev.com') {
+        if (email.toLowerCase() === 'medisevadmin@gmail.com') {
           navigate('/admin');
         } else {
           navigate('/dashboard');

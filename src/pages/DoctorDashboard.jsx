@@ -128,18 +128,21 @@ const DoctorDashboard = () => {
 
         {/* Quick Actions */}
         <section style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-          <div className="card" style={{ background: 'var(--gradient-primary)', color: 'white', padding: '2rem' }}>
-            <h3 style={{ color: 'white', marginBottom: '1rem' }}>Report Extraction</h3>
-            <p style={{ fontSize: '0.9rem', marginBottom: '1.5rem', opacity: 0.9 }}>
-              Instantly extract clinical data from medical reports securely.
-            </p>
-            <Link to="/upload-report" className="btn-primary" style={{ 
-              background: 'white', 
-              color: 'var(--primary-color)', 
-              textDecoration: 'none', 
-              display: 'inline-block',
-              boxShadow: 'none'
-            }}>Upload Now</Link>
+          {/* Upload Report card hidden per requirement — backend logic preserved */}
+          <div style={{ display: 'none' }}>
+            <div className="card" style={{ background: 'var(--gradient-primary)', color: 'white', padding: '2rem' }}>
+              <h3 style={{ color: 'white', marginBottom: '1rem' }}>Report Extraction</h3>
+              <p style={{ fontSize: '0.9rem', marginBottom: '1.5rem', opacity: 0.9 }}>
+                Instantly extract clinical data from medical reports securely.
+              </p>
+              <Link to="/upload-report" className="btn-primary" style={{ 
+                background: 'white', 
+                color: 'var(--primary-color)', 
+                textDecoration: 'none', 
+                display: 'inline-block',
+                boxShadow: 'none'
+              }}>Upload Now</Link>
+            </div>
           </div>
 
           <div className="card">

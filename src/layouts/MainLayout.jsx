@@ -34,12 +34,25 @@ const MainLayout = ({ children, title }) => {
         </div>
         
         <nav style={{ padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-          <SidebarLink to="/dashboard" icon={<Layout size={20} />} label="Dashboard" />
-          <SidebarLink to="/patients" icon={<Users size={20} />} label="Patients" />
-          <SidebarLink to="/add-patient" icon={<Plus size={20} />} label="Add Patient" />
-          <SidebarLink to="/manual-analysis" icon={<FileText size={20} />} label="Manual Entry" />
-          <SidebarLink to="/upload-report" icon={<Plus size={20} />} label="Report Extraction" />
-          <SidebarLink to="/notifications" icon={<Bell size={20} />} label="Notifications" />
+          {user?.email?.toLowerCase() === 'medisevadmin@gmail.com' ? (
+            <>
+              <SidebarLink to="/admin" icon={<Layout size={20} />} label="Admin Dashboard" />
+              <SidebarLink to="/patients" icon={<Users size={20} />} label="User Management" />
+              <SidebarLink to="/notifications" icon={<Bell size={20} />} label="Security Logs" />
+            </>
+          ) : (
+            <>
+              <SidebarLink to="/dashboard" icon={<Layout size={20} />} label="Dashboard" />
+              <SidebarLink to="/patients" icon={<Users size={20} />} label="Patients" />
+              <SidebarLink to="/add-patient" icon={<Plus size={20} />} label="Add Patient" />
+              <SidebarLink to="/manual-analysis" icon={<FileText size={20} />} label="Manual Entry" />
+              {/* Report Extraction link hidden per requirement — route and backend preserved */}
+              <span style={{ display: 'none' }}>
+                <SidebarLink to="/upload-report" icon={<Plus size={20} />} label="Report Extraction" />
+              </span>
+              <SidebarLink to="/notifications" icon={<Bell size={20} />} label="Notifications" />
+            </>
+          )}
         </nav>
 
         <div style={{ padding: '1.5rem', borderTop: '1px solid #f1f5f9' }}>
@@ -56,7 +69,9 @@ const MainLayout = ({ children, title }) => {
             </div>
             <div style={{ overflow: 'hidden' }}>
               <p style={{ margin: 0, fontWeight: '600', fontSize: '0.9rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{user?.name}</p>
-              <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Healthcare Professional</p>
+              <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                {user?.email?.toLowerCase() === 'medisevadmin@gmail.com' ? 'System Administrator' : 'Healthcare Professional'}
+              </p>
             </div>
           </div>
           <button onClick={() => setShowLogoutDialog(true)} style={{ 

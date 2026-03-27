@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('medisev_user');
   };
 
-  const isAdmin = () => user?.email?.toLowerCase() === 'admin@medisev.com';
+  const isAdmin = () => user?.email?.toLowerCase() === 'medisevadmin@gmail.com';
 
   return (
     <AuthContext.Provider value={{ user, login, logout, isAdmin }}>

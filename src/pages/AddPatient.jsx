@@ -18,6 +18,9 @@ const AddPatient = () => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [nameError, setNameError] = useState('');
+
+  const NAME_REGEX = /^[a-zA-Z ]+$/;
 
   const validateEmail = (email) => {
     // Strict regex: username@domain.tld
@@ -44,7 +47,19 @@ const AddPatient = () => {
     e.preventDefault();
     setError('');
 
-    // Validations
+    // Validate Full Name
+    const trimmedName = formData.name.trim();
+    if (!trimmedName) {
+      setNameError('Full Name is required');
+      return;
+    }
+    if (!NAME_REGEX.test(trimmedName)) {
+      setNameError('Name should contain only letters');
+      return;
+    }
+    setNameError('');
+
+    // Validate email
     if (!validateEmail(formData.email)) {
       setError('Please enter a valid email address.');
       return;
@@ -76,7 +91,17 @@ const AddPatient = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    
+
+    // Real-time name validation
+    if (name === 'name') {
+      if (value && !NAME_REGEX.test(value)) {
+        setNameError('Name should contain only letters');
+      } else {
+        setNameError('');
+      }
+      return;
+    }
+
     // Real-time validation
     if (name === 'email') {
       if (value && !validateEmail(value)) {
@@ -118,7 +143,17 @@ const AddPatient = () => {
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
             <div>
               <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>Patient Full Name</label>
-              <input name="name" placeholder="Enter name" value={formData.name} onChange={handleChange} required />
+              <input
+                name="name"
+                placeholder="Enter name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                style={nameError ? { borderColor: 'var(--danger-color)' } : {}}
+              />
+              {nameError && (
+                <p style={{ margin: '0.35rem 0 0 0', fontSize: '0.78rem', color: 'var(--danger-color)' }}>{nameError}</p>
+              )}
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
